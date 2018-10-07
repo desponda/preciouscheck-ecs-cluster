@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description:
+Description: "CF for PreciousCheck ECS Cluster"
 Resources:
   PreciousCheckASG:
     Type: "AWS::AutoScaling::AutoScalingGroup"
@@ -20,7 +20,14 @@ Resources:
       AssociatePublicIpAddress: true
       KeyName: preciouscheck
       ImageId: ami-0b9a214f40c38d5eb
+      IamInstanceProfile: ecs-cluster-iam
       SecurityGroups:
         - sg-0ee75ae7a01306ff1
       InstanceType: t3.nano
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          echo "ECS_CLUSTER=preciouscheck" > /etc/ecs/ecs.config
+          stop ecs
+          start ecs
 
