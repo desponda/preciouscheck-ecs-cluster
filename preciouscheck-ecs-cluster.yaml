@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description:
+Resources:
+  PreciousCheckASG:
+    Type: "AWS::AutoScaling::AutoScalingGroup"
+    Properties:
+      MaxSize: 5
+      MinSize: 2
+      AutoScalingGroupName: preciouscheck-ecs-asg
+      AvailabilityZones:
+        - us-east-1a
+        - us-east-1b
+      VPCZoneIdentifier:
+        - subnet-05c853d92b34f6957
+        - subnet-08dc8cdb7b11d64eb
+      LaunchConfigurationName: !Ref PreciousCheckLC
+  PreciousCheckLC:
+    Type: "AWS::AutoScaling::LaunchConfiguration"
+    Properties:
+      AssociatePublicIpAddress: true
+      KeyName: preciouscheck
+      ImageId: ami-0b9a214f40c38d5eb
+      SecurityGroups:
+        - sg-0ee75ae7a01306ff1
+      InstanceType: t3.nano
+
